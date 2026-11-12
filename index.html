@@ -1,0 +1,14 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GnR balance log</title>
+<style>body{font-family:-apple-system,system-ui,sans-serif;background:#0d1117;color:#e6edf3;margin:16px}
+h1{font-size:20px}table{border-collapse:collapse;width:100%;font-size:14px}td,th{padding:6px 8px;border-bottom:1px solid #30363d;text-align:left}
+.in{color:#3fb950}.out{color:#f0883e}small{color:#8b949e}</style></head><body>
+<h1>Grok and Roll · money balance changes</h1><small>Checked about every 5 minutes. Times in JST. Newest first.</small>
+<table id="t"><thead><tr><th>Time (JST)</th><th>Balance</th><th>Change</th><th>Kind</th><th>Playing</th></tr></thead><tbody></tbody></table>
+<script>
+fetch('balance_log.csv?'+Date.now()).then(r=>r.text()).then(t=>{
+ const lines=t.trim().split('\n').slice(1).reverse();const tb=document.querySelector('tbody');
+ for(const l of lines){const c=l.match(/("([^"]|"")*"|[^,]*)(,|$)/g).map(x=>x.replace(/,$/,'').replace(/^"|"$/g,'').replace(/""/g,'"'));
+  const tr=document.createElement('tr');tr.className=c[2].startsWith('+')?'in':(c[2].startsWith('-')?'out':'');
+  c.slice(0,5).forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.appendChild(td)});tb.appendChild(tr)}});
+</script></body></html>
